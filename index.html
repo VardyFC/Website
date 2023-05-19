@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: #333;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Align content vertically */
+            min-height: 100vh; /* Set minimum height to fill viewport */
+            border-radius: 10px; /* Add rounded edges to the body */
+        }
+        
+        .navbar {
+            background-color: #222;
+            padding: 40px 20px;
+            width: 200px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-right: 20px;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        
+        .navbar a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+        
+        .navbar a:hover {
+            background-color: #444;
+        }
+        
+        .navbar img {
+            max-width: 100%;
+            padding-bottom: 20px;
+        }
+        
+        .navbar .user-info {
+            margin-top: auto;
+            font-size: 12px;
+            text-align: center;
+            color: #ccc;
+        }
+        
+        .content {
+            padding: 20px;
+            margin-left: 225px;
+            flex-grow: 1;
+        }
+        
+        .content * {
+            padding-left: 20px;
+        }
+
+        .footer {
+            background-color: #222;
+            padding: 10px;
+            color: #fff;
+            text-align: center;
+            font-size: 14px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            margin-top: auto; /* Push the footer to the bottom */
+        }
+
+        .football-scores {
+            margin-top: 20px;
+        }
+
+        .football-scores-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .football-scores-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .football-scores-item {
+            margin-bottom: 10px;
+        }
+
+        .football-scores-team {
+            display: inline-block;
+            width: 150px;
+        }
+
+        .football-scores-score {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://i.ibb.co/JCv9Y3x/Screenshot-2023-04-25-105815-Copy-modified.png" type="image/png">
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const ipUrl = 'https://api.ipify.org?format=json';
+			
+            fetch(ipUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const ipAddress = data.ip;
+                    document.getElementById('ipAddress').textContent = `IP Address: ${ipAddress}`;
+                })
+                .catch(error => console.error('Error:', error));
+
+            const footballScoresUrl = 'https://api.football-data.org/v2/competitions/PL/matches?status=LIVE';
+            const footballApiKey = 'c8032fb20d094a1cbfc55b3ba91b9c8e'; // Replace with your own API key
+
+            fetch(footballScoresUrl, {
+                headers: {
+                    'X-Auth-Token': footballApiKey
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const matches = data.matches.slice(0, 5); // Display the latest 5 matches
+
+                    const scoresList = document.getElementById('footballScoresList');
+                    matches.forEach(match => {
+                        const homeTeam = match.homeTeam.name;
+                        const awayTeam = match.awayTeam.name;
+                        const homeScore = match.score.fullTime.homeTeam;
+                        const awayScore = match.score.fullTime.awayTeam;
+
+                        const scoreItem = document.createElement('li');
+                        scoreItem.classList.add('football-scores-item');
+
+                        const teamElement = document.createElement('span');
+                        teamElement.classList.add('football-scores-team');
+                        teamElement.textContent = `${homeTeam} vs ${awayTeam}`;
+
+                        const scoreElement = document.createElement('span');
+                        scoreElement.classList.add('football-scores-score');
+                        scoreElement.textContent = `${homeScore} - ${awayScore}`;
+
+                        scoreItem.appendChild(teamElement);
+                        scoreItem.appendChild(scoreElement);
+                        scoresList.appendChild(scoreItem);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+    <title>Name Pending</title>
+</head>
+<body>
+    <div class="navbar">
+        <img src="https://i.ibb.co/JCv9Y3x/Screenshot-2023-04-25-105815-Copy-modified.png" alt="Logo">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+    </div>
+    <div class="content">
+        <h1>Welcome to my new website!</h1>
+        <p>Our website provides a powerful platform for both students and adults to enhance their learning and accomplish tasks more efficiently. Whether you're a student looking to improve your academic performance or an adult seeking to optimize your productivity, our website offers a wide range of tools and resources to support your goals. With user-friendly interfaces and comprehensive content, you can access educational materials, organize your tasks, and collaborate with others seamlessly. Experience the convenience and effectiveness of our website and unlock your full potential today!</p>
+        <div class="football-scores">
+            <h2 class="football-scores-header">Latest English Football Scores</h2>
+            <ul class="football-scores-list" id="footballScoresList"></ul>
+        </div>
+    </div>
+    <div class="footer" id="ipAddress"></div>
+</body>
+</html>
