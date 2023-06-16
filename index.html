@@ -86,43 +86,6 @@
                     document.getElementById('ipAddress').textContent = `IP Address: ${ipAddress}`;
                 })
                 .catch(error => console.error('Error:', error));
-
-            const footballScoresUrl = 'https://api.football-data.org/v2/competitions/PL/matches?status=LIVE';
-            const footballApiKey = 'c8032fb20d094a1cbfc55b3ba91b9c8e'; // Replace with your own API key
-
-            fetch(footballScoresUrl, {
-                headers: {
-                    'X-Auth-Token': footballApiKey
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const matches = data.matches.slice(0, 5); // Display the latest 5 matches
-
-                    const scoresList = document.getElementById('footballScoresList');
-                    matches.forEach(match => {
-                        const homeTeam = match.homeTeam.name;
-                        const awayTeam = match.awayTeam.name;
-                        const homeScore = match.score.fullTime.homeTeam;
-                        const awayScore = match.score.fullTime.awayTeam;
-
-                        const scoreItem = document.createElement('li');
-                        scoreItem.classList.add('football-scores-item');
-
-                        const teamElement = document.createElement('span');
-                        teamElement.classList.add('football-scores-team');
-                        teamElement.textContent = `${homeTeam} vs ${awayTeam}`;
-
-                        const scoreElement = document.createElement('span');
-                        scoreElement.classList.add('football-scores-score');
-                        scoreElement.textContent = `${homeScore} - ${awayScore}`;
-
-                        scoreItem.appendChild(teamElement);
-                        scoreItem.appendChild(scoreElement);
-                        scoresList.appendChild(scoreItem);
-                    });
-                })
-                .catch(error => console.error('Error:', error));
         });
     </script>
     <title>Name Pending</title>
@@ -138,10 +101,6 @@
     <div class="content">
         <h1>Welcome to my new website!</h1>
         <p>Our website provides a powerful platform for both students and adults to enhance their learning and accomplish tasks more efficiently. Whether you're a student looking to improve your academic performance or an adult seeking to optimize your productivity, our website offers a wide range of tools and resources to support your goals. With user-friendly interfaces and comprehensive content, you can access educational materials, organize your tasks, and collaborate with others seamlessly. Experience the convenience and effectiveness of our website and unlock your full potential today!</p>
-        <div class="football-scores">
-            <h2 class="football-scores-header">Latest English Football Scores</h2>
-            <ul class="football-scores-list" id="footballScoresList"></ul>
-        </div>
     </div>
     <div class="footer" id="ipAddress"></div>
 </body>
